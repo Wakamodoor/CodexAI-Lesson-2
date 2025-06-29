@@ -1,73 +1,147 @@
-### **專案需求文件：個人書籤管理器 (Bookmark Manager) - v2**
+# 個人書籤管理器 (Personal Bookmark Manager) - v2
 
-#### **1. 專案概述**
+## 1. 專案概述 (Project Overview)
 
 本專案旨在開發一個個人化的書籤管理工具，讓使用者可以更有效率地儲存、組織、搜尋及管理自己的網路書籤。相較於瀏覽器內建的書籤功能，此工具提供更豐富的描述欄位、標籤系統與更強大的搜尋篩選功能，解決書籤一多就難以尋找和整理的痛點。
 
-#### **2. 目標使用者**
+## 2. 功能特色 (Features Implemented)
 
-任何需要大量收集、整理網路連結，並希望有一個比瀏覽器預設功能更強大管理工具的個人使用者，例如：
-*   研究人員、學生
-*   設計師、工程師
-*   內容創作者
-*   任何網路資訊重度使用者
+*   **新增書籤 (Create)**: 輸入 URL (必填)、標題、描述、標籤 (選填)。URL 格式會進行驗證。
+*   **查看書籤列表 (Read)**:
+    *   **卡片模式 (Card View)**: 每張卡片顯示書籤的標題、描述、連結與所有標籤。
+    *   **表格模式 (Table View)**: 以表格呈現書籤，包含標題、連結、標籤欄位。
+    *   提供視圖切換功能。
+*   **編輯書籤 (Update)**: 修改現有書籤的所有資訊。
+*   **刪除書籤 (Delete)**: 刪除書籤前有確認提示。
+*   **搜尋與篩選 (Search & Filter)**:
+    *   **關鍵字搜尋**: 搜尋書籤的「標題」和「簡短描述」。
+    *   **標籤篩選**: 點擊書籤上的標籤以篩選包含該標籤的書籤。
+    *   提供清除搜尋/篩選的選項。
+*   **使用者介面 (UI)**: 簡潔、直觀，易於操作。
+*   **響應式設計 (RWD)**: 網頁能在桌面和行動裝置上正常顯示與操作。
 
-#### **3. 功能需求 (Functional Requirements)**
+## 3. 技術棧 (Technology Stack)
 
-##### **3.1 新增書籤 (Create)**
-*   系統需提供一個表單或介面讓使用者輸入新的書籤資訊。
-*   必填欄位：
-    *   **連結 (URL)**：需要驗證其格式是否為有效的網址。
-*   選填欄位：
-    *   **標題 (Title)**：書籤的名稱。
-    *   **簡短描述 (Description)**：對連結內容的補充說明。
-    *   **標籤 (Tags)**：可為一筆書籤加上多個標籤，用以分類。
+*   **後端 (Backend)**:
+    *   Java 11
+    *   Spring Boot (v2.7.5)
+    *   Spring Data JPA
+    *   Maven (for dependency management and build)
+    *   H2 Database (in-memory, for development and testing)
+*   **前端 (Frontend)**:
+    *   Vue 3 (Composition API with `<script setup>`)
+    *   Vite (build tool)
+    *   Pinia (state management)
+    *   Vue Router
+    *   Axios (for API calls)
+    *   Node.js and npm (for frontend development environment)
+*   **API 介面**:
+    *   後端以 RESTful API 形式提供對書籤資源的 CRUD 操作。
 
-##### **3.2 查看書籤列表 (Read)**
-*   在主要介面，透過 API 從後端獲取資料，並以列表形式展示所有已儲存的書籤。
-*   提供至少一種顯示模式：
-    *   **卡片模式 (Card View)**：每張卡片顯示單一書籤的標題、描述、連結與所有標籤。
-    *   **表格模式 (Table View)**：以表格呈現，每列為一筆書籤，欄位包含標題、連結、標籤等。
-*   每筆書籤旁需有「編輯」與「刪除」的按鈕。
+## 4. 專案結構 (Project Structure)
 
-##### **3.3 編輯書籤 (Update)**
-*   使用者點擊「編輯」按鈕後，應跳出一個預先填好該書籤現有資料的表單。
-*   使用者可以修改連結、標題、描述、標籤等所有資訊。
-*   儲存後，前端將呼叫更新 API，並刷新列表中的資訊。
+```
+.
+├── frontend/       # Vue 3 Frontend Application
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/ # Reusable Vue components
+│   │   ├── router/     # Vue Router configuration
+│   │   ├── store/      # Pinia store (bookmarks.js)
+│   │   ├── views/      # Page-level components (HomeView.vue)
+│   │   ├── App.vue
+│   │   └── main.js
+│   ├── package.json
+│   └── vite.config.js
+├── src/            # Spring Boot Backend Application (Maven structure)
+│   ├── main/
+│   │   ├── java/com/example/bookmarkmanager/
+│   │   │   ├── BookmarkManagerApplication.java
+│   │   │   ├── controller/
+│   │   │   ├── model/
+│   │   │   ├── repository/
+│   │   │   └── service/
+│   │   └── resources/
+│   │       └── application.properties
+│   └── test/         # Backend tests
+│       └── java/com/example/bookmarkmanager/service/
+│           └── BookmarkServiceImplTest.java
+├── pom.xml         # Backend Maven configuration
+└── README.md
+```
 
-##### **3.4 刪除書籤 (Delete)**
-*   使用者點擊「刪除」按鈕後，系統應跳出確認對話框。
-*   確認後，前端將呼叫刪除 API，並將該書籤從列表中移除。
+## 5. 安裝與執行 (Setup and Run)
 
-##### **3.5 搜尋與篩選 (Search & Filter)**
-*   **關鍵字搜尋**：
-    *   提供一個搜尋框，讓使用者輸入關鍵字。
-    *   搜尋功能可由後端 API 實現，範圍涵蓋書籤的「標題」和「簡短描述」。
-*   **標籤篩選**：
-    *   使用者可以點擊任一書籤上的標籤。
-    *   點擊後，前端應呼叫 API，只獲取並顯示包含該標籤的所有書籤。
-    *   需提供一個清除篩選的選項。
+### 5.1 環境需求 (Prerequisites)
 
-#### **4. 技術棧與架構需求 (Technology Stack & Architecture)**
+*   Java JDK 11 或更高版本 (for Backend)
+*   Apache Maven 3.6.x 或更高版本 (for Backend)
+*   Node.js 16.x 或更高版本 (includes npm, for Frontend)
 
-*   **前端 (Frontend)**：
-    *   **框架**：Vue 3
-    *   **狀態管理**：Pinia
-*   **後端 (Backend)**：
-    *   **框架**：Spring Boot
-    *   **資料存取**：Spring Data JPA
-*   **資料庫 (Database)**：
-    *   支援 H2 (用於快速開發與測試) 或 MySQL (用於生產環境)。
-*   **API 介面**：
-    *   後端需以 RESTful API 形式提供對書籤資源的 CRUD (Create, Read, Update, Delete) 操作介面。
+### 5.2 後端 (Backend - Spring Boot)
 
-#### **5. 非功能性需求 (Non-Functional Requirements)**
+1.  **進入專案根目錄 (Navigate to project root directory)**:
+    ```bash
+    cd path/to/bookmark-manager
+    ```
 
-*   **使用者介面 (UI)**：介面應簡潔、直觀，易於操作。
-*   **響應式設計 (RWD)**：網頁應能在桌面和行動裝置上正常顯示與操作。
-*   **效能**：即使書籤數量增多，列表的載入與搜尋速度也應維持流暢。
+2.  **編譯並執行後端應用程式 (Compile and run the backend application)**:
+    使用 Maven wrapper (如果專案內有 `mvnw` 的話，建議使用):
+    ```bash
+    ./mvnw spring-boot:run
+    ```
+    或者，如果系統已安裝 Maven:
+    ```bash
+    mvn spring-boot:run
+    ```
+    後端服務預設會在 `http://localhost:8080` 啟動。
+    您可以透過 `http://localhost:8080/h2-console` 存取 H2 資料庫控制台 (JDBC URL: `jdbc:h2:mem:bookmarkdb`, User Name: `sa`, Password: (空白))。
 
-#### **6. 未來可能擴充的功能 (Future Scope)**
+### 5.3 前端 (Frontend - Vue 3)
+
+1.  **進入前端專案目錄 (Navigate to the frontend directory)**:
+    ```bash
+    cd path/to/bookmark-manager/frontend
+    ```
+
+2.  **安裝依賴套件 (Install dependencies)**:
+    ```bash
+    npm install
+    ```
+
+3.  **啟動開發伺服器 (Start the development server)**:
+    ```bash
+    npm run dev
+    ```
+    前端應用程式預設會在 `http://localhost:5173` (或其他 Vite 指定的埠號) 啟動。
+    Vite 設定檔 (`vite.config.js`) 中已包含代理設定，會將 `/api` 開頭的請求轉發至後端服務 (`http://localhost:8080/api`)。
+
+4.  **開啟瀏覽器 (Open your browser)**:
+    造訪 `http://localhost:5173` 即可開始使用書籤管理器。
+
+### 5.4 執行後端測試 (Running Backend Tests)
+
+在專案根目錄下執行:
+```bash
+./mvnw test
+# 或者
+# mvn test
+```
+
+## 6. API 端點 (API Endpoints - Backend)
+
+後端提供以下主要的 RESTful API 端點 (基本路徑: `/api/bookmarks`):
+
+*   `POST /` : 新增書籤
+*   `GET /` : 獲取所有書籤
+*   `GET /{id}` : 根據 ID 獲取特定書籤
+*   `PUT /{id}` : 根據 ID 更新特定書籤
+*   `DELETE /{id}` : 根據 ID 刪除特定書籤
+*   `GET /search?keyword={keyword}` : 根據關鍵字搜尋書籤 (標題或描述)
+*   `GET /filter?tag={tag}` : 根據標籤篩選書籤
+
+## 7. 未來可能擴充的功能 (Future Scope - Original)
 
 *   **匯入／匯出**：支援從瀏覽器匯出書籤檔 (HTML) 或匯出為 JSON/CSV 格式。
 *   **瀏覽器擴充功能**：製作瀏覽器擴充，讓使用者在瀏覽網頁時能一鍵快速新增書籤。
